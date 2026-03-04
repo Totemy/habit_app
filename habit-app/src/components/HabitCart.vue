@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { ref, watch } from 'vue'
 
-const countItems = ref(0)
-const habit = reactive([
+interface HabitItem {
+    isChecked: boolean
+}
+
+const habit = ref<HabitItem[]>([
     { isChecked: false },
     { isChecked: false },
     { isChecked: false },
@@ -11,22 +14,23 @@ const habit = reactive([
     { isChecked: false },
     { isChecked: false },
 ])
+const countItems = ref(habit.value.length)
 const handleClick = (item) => {
     item.isChecked = !item.isChecked
 }
 const createHabit = (count: number) => {
-    habit.splice(0, habit.length)
+    habit.value.splice(0, habit.length)
     for (let i = 0; i < count; i++) {
-        habit.push({ isChecked: false })
+        habit.value.push({ isChecked: false })
     }
 }
 const done = () => {
-    if (!habit.length) return
+    if (!habit.value.length) return
 
     let lastCheckedIndex = -1
 
-    for (let i = habit.length - 1; i >= 0; i--) {
-        if (habit[i].isChecked) {
+    for (let i = habit.value.length - 1; i >= 0; i--) {
+        if (habit.value[i].isChecked) {
             lastCheckedIndex = i
             break
         }
@@ -34,16 +38,28 @@ const done = () => {
 
     const nextIndex = lastCheckedIndex === -1 ? 0 : lastCheckedIndex + 1
 
-    if (nextIndex < habit.length) {
-        habit[nextIndex].isChecked = true
+    if (nextIndex < habit.value.length) {
+        habit.value[nextIndex].isChecked = true
     }
 }
+
+watch(countItems, (newCount) => {
+    const currentLength = habit.value.length
+
+    if (newCount > currentLength) {
+        for (let i = currentLength; i < newCount; i++) {
+            habit.value.push({ isChecked: false })
+        }
+    } else if (newCount < currentLength) {
+        habit.value.splice(newCount)
+    }
+})
 </script>
 <template>
     <div>
         <h3>Habit</h3>
         <p>Here you need input how much habit you need</p>
-        <input v-model="countItems" placeholder="Count items" />
+        <input type="number" v-model="countItems" placeholder="Count items" />
         <button @click="createHabit(countItems)">Create</button>
         <div class="habits">
             <div
