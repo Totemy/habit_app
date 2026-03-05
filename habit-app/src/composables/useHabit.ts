@@ -1,16 +1,9 @@
 import { computed, ref, watch } from 'vue'
 import type { HabitItem } from '../types/Habit'
+import { createHabitItems } from '../utils/createHabitItems'
 
 export function useHabit() {
-    const habit = ref<HabitItem[]>([
-        { isChecked: false },
-        { isChecked: false },
-        { isChecked: false },
-        { isChecked: false },
-        { isChecked: false },
-        { isChecked: false },
-        { isChecked: false },
-    ])
+    const habit = ref<HabitItem[]>(createHabitItems(7))
 
     const countItems = ref(habit.value.length)
 
@@ -66,9 +59,7 @@ export function useHabit() {
         const currentLength = habit.value.length
 
         if (newCount > currentLength) {
-            for (let i = currentLength; i < newCount; i++) {
-                habit.value.push({ isChecked: false })
-            }
+            habit.value.push(...createHabitItems(newCount - currentLength))
         } else if (newCount < currentLength) {
             habit.value.splice(newCount)
         }
