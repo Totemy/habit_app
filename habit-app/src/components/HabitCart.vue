@@ -1,59 +1,7 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { useHabit } from '../composables/useHabit'
 
-interface HabitItem {
-    isChecked: boolean
-}
-
-const habit = ref<HabitItem[]>([
-    { isChecked: false },
-    { isChecked: false },
-    { isChecked: false },
-    { isChecked: false },
-    { isChecked: false },
-    { isChecked: false },
-    { isChecked: false },
-])
-const countItems = ref(habit.value.length)
-const handleClick = (item) => {
-    item.isChecked = !item.isChecked
-}
-const createHabit = (count: number) => {
-    habit.value.splice(0, habit.length)
-    for (let i = 0; i < count; i++) {
-        habit.value.push({ isChecked: false })
-    }
-}
-const done = () => {
-    if (!habit.value.length) return
-
-    let lastCheckedIndex = -1
-
-    for (let i = habit.value.length - 1; i >= 0; i--) {
-        if (habit.value[i].isChecked) {
-            lastCheckedIndex = i
-            break
-        }
-    }
-
-    const nextIndex = lastCheckedIndex === -1 ? 0 : lastCheckedIndex + 1
-
-    if (nextIndex < habit.value.length) {
-        habit.value[nextIndex].isChecked = true
-    }
-}
-
-watch(countItems, (newCount) => {
-    const currentLength = habit.value.length
-
-    if (newCount > currentLength) {
-        for (let i = currentLength; i < newCount; i++) {
-            habit.value.push({ isChecked: false })
-        }
-    } else if (newCount < currentLength) {
-        habit.value.splice(newCount)
-    }
-})
+const { habit, countItems, handleClick, createHabit, done } = useHabit()
 </script>
 <template>
     <div>
