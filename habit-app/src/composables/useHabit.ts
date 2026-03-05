@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { HabitItem } from '../types/Habit'
 
 export function useHabit() {
@@ -14,7 +14,7 @@ export function useHabit() {
 
     const countItems = ref(habit.value.length)
 
-    const handleClick = (item: HabitItem) => {
+    const handleClick = (index) => {
         item.isChecked = !item.isChecked
     }
 
@@ -37,6 +37,21 @@ export function useHabit() {
         }
     }
 
+    const checkedCount = computed(() => {
+        return habit.value.filter((i) => i.isChecked).length
+    })
+
+    const progressCount = computed(() => {
+        return `${checkedCount.value}/${habit.value.length}`
+    })
+
+    const progressPercent = computed(() => {
+        return (checkedCount.value / habit.value.length) * 100
+    })
+
+    const reset = () => {
+        habit.value.forEach((element) => (element.isChecked = false))
+    }
     watch(countItems, (newCount) => {
         const currentLength = habit.value.length
 
@@ -54,5 +69,8 @@ export function useHabit() {
         countItems,
         handleClick,
         done,
+        progressPercent,
+        progressCount,
+        reset,
     }
 }

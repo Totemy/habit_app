@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import { useHabit } from '../composables/useHabit'
 
-const { habit, countItems, handleClick, createHabit, done } = useHabit()
+const {
+    habit,
+    countItems,
+    handleClick,
+    progressCount,
+    progressPercent,
+    done,
+    reset,
+} = useHabit()
 </script>
 <template>
     <div>
         <h3>Habit</h3>
         <p>Here you need input how much habit you need</p>
         <input type="number" v-model="countItems" placeholder="Count items" />
-        <button @click="createHabit(countItems)">Create</button>
         <div class="habits">
             <div
                 v-for="item in habit"
@@ -16,11 +23,21 @@ const { habit, countItems, handleClick, createHabit, done } = useHabit()
                 :class="{ 'habit-item__active': item.isChecked }"
                 @click="handleClick(item)"
             ></div>
+            <button @click="reset">Reset</button>
         </div>
         <button @click="done">Done</button>
+        <p>Progress: {{ progressCount }}</p>
+
+        <div class="progress">
+            <div
+                class="progress-bar"
+                :style="{ width: progressPercent + '%' }"
+            ></div>
+        </div>
     </div>
 </template>
 <style lang="css" scoped>
+@import '../styles/progress';
 .habits {
     display: flex;
     flex-wrap: wrap;
