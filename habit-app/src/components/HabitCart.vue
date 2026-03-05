@@ -18,10 +18,10 @@ const {
         <input type="number" v-model="countItems" placeholder="Count items" />
         <div class="habits">
             <div
-                v-for="item in habit"
+                v-for="(item, index) in habit"
                 class="habit-item"
                 :class="{ 'habit-item__active': item.isChecked }"
-                @click="handleClick(item)"
+                @click="handleClick(index)"
             ></div>
             <button @click="reset">Reset</button>
         </div>

@@ -14,10 +14,11 @@ export function useHabit() {
 
     const countItems = ref(habit.value.length)
 
-    const handleClick = (index) => {
-        item.isChecked = !item.isChecked
+    const handleClick = (index: number) => {
+        habit.value[index].isChecked = !habit.value[index]?.isChecked
     }
 
+    // with checked after last checked
     const done = () => {
         if (!habit.value.length) return
 
@@ -34,6 +35,15 @@ export function useHabit() {
 
         if (nextIndex < habit.value.length) {
             habit.value[nextIndex].isChecked = true
+        }
+    }
+
+    // checked all habit in pull
+    const doneAll = () => {
+        const index = habit.value.findIndex((i) => !i.isChecked)
+
+        if (index !== -1) {
+            habit.value[index].isChecked = true
         }
     }
 
@@ -72,5 +82,6 @@ export function useHabit() {
         progressPercent,
         progressCount,
         reset,
+        doneAll,
     }
 }
