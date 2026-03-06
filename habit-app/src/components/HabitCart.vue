@@ -9,6 +9,8 @@ const {
     progressPercent,
     done,
     reset,
+    doneAll,
+    undo,
 } = useHabit()
 </script>
 <template>
@@ -26,6 +28,8 @@ const {
             <button @click="reset">Reset</button>
         </div>
         <button @click="done">Done</button>
+        <button @click="doneAll">Done All</button>
+        <button @click="undo">Undo</button>
         <p>Progress: {{ progressCount }}</p>
 
         <div class="progress">

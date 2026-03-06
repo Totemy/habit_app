@@ -63,7 +63,7 @@ export function useHabit() {
     }
 
     // checked all habit in pull
-    const doneAll = () => {
+    const doneSuccessively = () => {
         const index = habit.value.findIndex((i) => !i.isChecked)
 
         if (index !== -1) {
@@ -71,14 +71,29 @@ export function useHabit() {
         }
     }
 
+    const doneAll = () => {
+        habit.value.forEach((item) => {
+            item.isChecked = true
+        })
+    }
+
+    const undo = () => {
+        const index = habit.value.map((i) => i.isChecked).lastIndexOf(true)
+
+        if (index !== -1) {
+            habit.value[index].isChecked = false
+        }
+    }
     return {
         habit,
         countItems,
         handleClick,
         done,
+        doneAll,
+        doneSuccessively,
         progressPercent,
         progressCount,
         reset,
-        doneAll,
+        undo,
     }
 }
