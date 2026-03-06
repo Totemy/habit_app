@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import { useHabits } from '../composables/useHabits'
+import { useHabitList } from '../composables/useHabitList'
 import HabitCart from './HabitCart.vue'
+import HabitForm from './HabitForm.vue'
 
-const { habits, addHabit } = useHabits()
+const { habits, addHabit, removeHabit } = useHabitList()
 
 addHabit('Workout', 7)
 addHabit('English', 5)
 </script>
 <template>
     <div>
-        <HabitCart v-for="habit in habits" :key="habit.id" :habit="habit" />
+        <HabitForm @submit="addHabit" />
+        <HabitCart
+            v-for="habit in habits"
+            :key="habit.id"
+            :habit="habit"
+            @remove="removeHabit"
+        />
     </div>
 </template>

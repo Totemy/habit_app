@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Habit } from '../types/Habit'
-import { useHabit } from '../composables/useHabit'
+import { useHabitItems } from '../composables/useHabitItems'
 import HabitItem from './HabitItem.vue'
 
 const props = defineProps<{
@@ -14,10 +14,11 @@ const {
     done,
     reset,
     resizeHabit,
-} = useHabit(props.habit.items)
+} = useHabitItems(props.habit.items)
 </script>
 <template>
     <h3>{{ habit.title }}</h3>
+    <button @click="$emit('remove', habit.id)">Delete</button>
     <div class="habits">
         <input
             type="number"
@@ -28,6 +29,7 @@ const {
             v-for="(item, index) in habit.items"
             :key="index"
             :item="item"
+            v-memo="[item.isChecked]"
             @click="handleClick(index)"
         />
     </div>

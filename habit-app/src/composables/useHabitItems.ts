@@ -2,7 +2,7 @@ import { computed } from 'vue'
 import type { HabitItem } from '../types/Habit'
 import { createHabitItems } from '../utils/createHabitItems'
 
-export function useHabit(habit: HabitItem[]) {
+export function useHabitItems(habit: HabitItem[]) {
     /* ---------------- GETTERS ---------------- */
 
     const checkedCount = computed(() => {
