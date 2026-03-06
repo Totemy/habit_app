@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import HabitCart from './components/HabitCart.vue'
+import HabitList from './components/HabitList.vue'
 </script>
 
 <template>
     <div class="app">
         <div class="container">
-            <HabitCart />
+            <HabitList />
         </div>
     </div>
 </template>

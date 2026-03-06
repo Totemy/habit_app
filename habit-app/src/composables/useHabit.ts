@@ -1,55 +1,44 @@
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 import type { HabitItem } from '../types/Habit'
 import { createHabitItems } from '../utils/createHabitItems'
 
-export function useHabit() {
-    /* ---------------- STATE ---------------- */
-    const habit = ref<HabitItem[]>(createHabitItems(7))
-    const countItems = ref(habit.value.length)
-
+export function useHabit(habit: HabitItem[]) {
     /* ---------------- GETTERS ---------------- */
 
     const checkedCount = computed(() => {
-        return habit.value.filter((i) => i.isChecked).length
+        return habit.filter((i) => i.isChecked).length
     })
 
     const progressCount = computed(() => {
-        return `${checkedCount.value}/${habit.value.length}`
+        return `${checkedCount.value}/${habit.length}`
     })
 
     const progressPercent = computed(() => {
-        return (checkedCount.value / habit.value.length) * 100
+        return (checkedCount.value / habit.length) * 100
+    })
+
+    const isCompleted = computed(() => {
+        return checkedCount.value == habit.length
     })
 
     /* ---------------- ACTIONS ---------------- */
 
-    watch(countItems, (newCount) => {
-        // use resizeHabit instead watch function ??
-        const currentLength = habit.value.length
-
-        if (newCount > currentLength) {
-            habit.value.push(...createHabitItems(newCount - currentLength))
-        } else if (newCount < currentLength) {
-            habit.value.splice(newCount)
-        }
-    })
-
     const reset = () => {
-        habit.value.forEach((element) => (element.isChecked = false))
+        habit.forEach((element) => (element.isChecked = false))
     }
 
     const handleClick = (index: number) => {
-        habit.value[index].isChecked = !habit.value[index]?.isChecked
+        habit[index].isChecked = !habit[index].isChecked
     }
 
     // checked only after last checked
     const done = () => {
-        if (!habit.value.length) return
+        if (!habit.length) return
 
         let lastCheckedIndex = -1
 
-        for (let i = habit.value.length - 1; i >= 0; i--) {
-            if (habit.value[i].isChecked) {
+        for (let i = habit.length - 1; i >= 0; i--) {
+            if (habit[i].isChecked) {
                 lastCheckedIndex = i
                 break
             }
@@ -57,36 +46,47 @@ export function useHabit() {
 
         const nextIndex = lastCheckedIndex === -1 ? 0 : lastCheckedIndex + 1
 
-        if (nextIndex < habit.value.length) {
-            habit.value[nextIndex].isChecked = true
+        if (nextIndex < habit.length) {
+            habit[nextIndex].isChecked = true
         }
     }
 
     // checked all habit in pull
     const doneSuccessively = () => {
-        const index = habit.value.findIndex((i) => !i.isChecked)
+        const index = habit.findIndex((i) => !i.isChecked)
 
         if (index !== -1) {
-            habit.value[index].isChecked = true
+            habit[index].isChecked = true
         }
     }
 
     const doneAll = () => {
-        habit.value.forEach((item) => {
+        habit.forEach((item) => {
             item.isChecked = true
         })
     }
 
     const undo = () => {
-        const index = habit.value.map((i) => i.isChecked).lastIndexOf(true)
+        const index = habit.map((i) => i.isChecked).lastIndexOf(true)
 
         if (index !== -1) {
-            habit.value[index].isChecked = false
+            habit[index].isChecked = false
         }
     }
+
+    const resizeHabit = (newCount: number) => {
+        const currentLength = habit.length
+
+        if (newCount > currentLength) {
+            habit.push(...createHabitItems(newCount - currentLength))
+        }
+        if (newCount < currentLength) {
+            habit.splice(newCount)
+        }
+    }
+
     return {
-        habit,
-        countItems,
+        isCompleted,
         handleClick,
         done,
         doneAll,
@@ -95,5 +95,6 @@ export function useHabit() {
         progressCount,
         reset,
         undo,
+        resizeHabit,
     }
 }
