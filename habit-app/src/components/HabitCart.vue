@@ -2,9 +2,15 @@
 import type { Habit } from '../types/Habit'
 import { useHabitItems } from '../composables/useHabitItems'
 import HabitItem from './HabitItem.vue'
+import { ref } from 'vue'
 
 const props = defineProps<{
     habit: Habit
+}>()
+
+const emit = defineEmits<{
+    (e: 'remove', id: string): void
+    (e: 'rename', id: string, title: string): void
 }>()
 
 const {
@@ -15,10 +21,25 @@ const {
     reset,
     resizeHabit,
 } = useHabitItems(props.habit.items)
+
+const isEditing = ref(false)
+const newName = ref(props.habit.title)
+
+const save = () => {
+    emit('rename', props.habit.id, newName.value)
+    isEditing.value = false
+}
 </script>
 <template>
-    <h3>{{ habit.title }}</h3>
-    <button @click="$emit('remove', habit.id)">Delete</button>
+    <div v-if="!isEditing">
+        <h3>{{ habit.title }}</h3>
+        <button @click="isEditing = true">Edit</button>
+    </div>
+    <div v-else>
+        <input v-model="newName" />
+        <button @click="save">Save</button>
+    </div>
+    <button @click="emit('remove', habit.id)">Delete</button>
     <div class="habits">
         <input
             type="number"

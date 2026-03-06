@@ -3,7 +3,7 @@ import { useHabitList } from '../composables/useHabitList'
 import HabitCart from './HabitCart.vue'
 import HabitForm from './HabitForm.vue'
 
-const { habits, addHabit, removeHabit } = useHabitList()
+const { habits, addHabit, removeHabit, renameHabit } = useHabitList()
 
 addHabit('Workout', 7)
 addHabit('English', 5)
@@ -16,6 +16,7 @@ addHabit('English', 5)
             :key="habit.id"
             :habit="habit"
             @remove="removeHabit"
+            @rename="renameHabit"
         />
     </div>
 </template>
