@@ -3,15 +3,46 @@ import type { HabitItem } from '../types/Habit'
 import { createHabitItems } from '../utils/createHabitItems'
 
 export function useHabit() {
+    /* ---------------- STATE ---------------- */
     const habit = ref<HabitItem[]>(createHabitItems(7))
-
     const countItems = ref(habit.value.length)
+
+    /* ---------------- GETTERS ---------------- */
+
+    const checkedCount = computed(() => {
+        return habit.value.filter((i) => i.isChecked).length
+    })
+
+    const progressCount = computed(() => {
+        return `${checkedCount.value}/${habit.value.length}`
+    })
+
+    const progressPercent = computed(() => {
+        return (checkedCount.value / habit.value.length) * 100
+    })
+
+    /* ---------------- ACTIONS ---------------- */
+
+    watch(countItems, (newCount) => {
+        // use resizeHabit instead watch function ??
+        const currentLength = habit.value.length
+
+        if (newCount > currentLength) {
+            habit.value.push(...createHabitItems(newCount - currentLength))
+        } else if (newCount < currentLength) {
+            habit.value.splice(newCount)
+        }
+    })
+
+    const reset = () => {
+        habit.value.forEach((element) => (element.isChecked = false))
+    }
 
     const handleClick = (index: number) => {
         habit.value[index].isChecked = !habit.value[index]?.isChecked
     }
 
-    // with checked after last checked
+    // checked only after last checked
     const done = () => {
         if (!habit.value.length) return
 
@@ -39,31 +70,6 @@ export function useHabit() {
             habit.value[index].isChecked = true
         }
     }
-
-    const checkedCount = computed(() => {
-        return habit.value.filter((i) => i.isChecked).length
-    })
-
-    const progressCount = computed(() => {
-        return `${checkedCount.value}/${habit.value.length}`
-    })
-
-    const progressPercent = computed(() => {
-        return (checkedCount.value / habit.value.length) * 100
-    })
-
-    const reset = () => {
-        habit.value.forEach((element) => (element.isChecked = false))
-    }
-    watch(countItems, (newCount) => {
-        const currentLength = habit.value.length
-
-        if (newCount > currentLength) {
-            habit.value.push(...createHabitItems(newCount - currentLength))
-        } else if (newCount < currentLength) {
-            habit.value.splice(newCount)
-        }
-    })
 
     return {
         habit,
