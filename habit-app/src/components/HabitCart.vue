@@ -2,7 +2,7 @@
 import type { Habit } from '../types/Habit'
 import { useHabitItems } from '../composables/useHabitItems'
 import HabitItem from './HabitItem.vue'
-import { ref } from 'vue'
+import HabitTitle from './HabitTitle.vue'
 
 const props = defineProps<{
     habit: Habit
@@ -21,24 +21,12 @@ const {
     reset,
     resizeHabit,
 } = useHabitItems(props.habit.items)
-
-const isEditing = ref(false)
-const newName = ref(props.habit.title)
-
-const save = () => {
-    emit('rename', props.habit.id, newName.value)
-    isEditing.value = false
-}
 </script>
 <template>
-    <div v-if="!isEditing">
-        <h3>{{ habit.title }}</h3>
-        <button @click="isEditing = true">Edit</button>
-    </div>
-    <div v-else>
-        <input v-model="newName" />
-        <button @click="save">Save</button>
-    </div>
+    <HabitTitle
+        :title="habit.title"
+        @rename="emit('rename', habit.id, $event)"
+    />
     <button @click="emit('remove', habit.id)">Delete</button>
     <div class="habits">
         <input
@@ -53,6 +41,7 @@ const save = () => {
             v-memo="[item.isChecked]"
             @click="handleClick(index)"
         />
+        <!-- or using habit.id in :key? -->
     </div>
     <p>{{ progressCount }}</p>
     <div class="progress">
