@@ -12,7 +12,7 @@ const emit = defineEmits<{
 }>()
 </script>
 <template>
-    <div>
+    <div class="space-y-3">
         <HabitSidebarItem
             v-for="habit in habits"
             :key="habit.id"

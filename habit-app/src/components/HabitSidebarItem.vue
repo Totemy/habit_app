@@ -20,20 +20,28 @@ const percent = computed(() => {
 })
 </script>
 <template>
-    <div class="sidebar-item" :class="{ active }">
-        <div class="row">
-            <div class="habit-color" :style="{ background: habit.color }" />
+    <div
+        class="p-3 rounded-lg cursor-pointer transition"
+        :class="active ? 'bg-[#21262d]' : 'hover:bg-[#21262d]'"
+    >
+        <div class="flex items-center gap-2">
+            <div
+                class="w-2 h-2 rounded-full"
+                :style="{ background: habit.color }"
+            />
 
-            <span class="title">
+            <span class="flex-1 text-sm font-medium">
                 {{ habit.title }}
             </span>
 
-            <span class="count"> {{ checked }}/{{ habit.items.length }} </span>
+            <span class="text-xs text-gray-400">
+                {{ checked }}/{{ habit.items.length }}
+            </span>
         </div>
 
-        <div class="progress">
+        <div class="mt-2 h-1 bg-[#30363d] rounded">
             <div
-                class="progress-bar"
+                class="h-full rounded"
                 :style="{
                     width: percent + '%',
                     background: habit.color,
@@ -42,33 +50,3 @@ const percent = computed(() => {
         </div>
     </div>
 </template>
-<style lang="css" scoped>
-.sidebar-item {
-    padding: 10px;
-    cursor: pointer;
-}
-
-.row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.habit-color {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-}
-
-.progress {
-    height: 4px;
-    background: #ddd;
-    border-radius: 4px;
-    margin-top: 6px;
-}
-
-.progress-bar {
-    height: 100%;
-    border-radius: 4px;
-}
-</style>

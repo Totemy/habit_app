@@ -5,22 +5,25 @@ import HabitSidebar from './HabitSidebar.vue'
 
 const { habits, activeHabit, setActiveHabit, addHabit } = useHabitList()
 addHabit('Workout', 7, 'red')
-addHabit('English', 5, 'blue')
+addHabit('English', 5, 'green')
 </script>
 <template>
-    <div>
+    <div class="min-h-screen flex">
         <HabitSidebar
+            class="sidebar"
             :habits="habits"
             :activeHabit="activeHabit"
             @select="setActiveHabit"
         />
-
-        <HabitDetails
-            v-if="activeHabit"
-            :key="activeHabit.id"
-            :habit="activeHabit"
-        />
-
-        <HabitForm @submit="addHabit" />
+        <div class="flex-1 page">
+            <HabitDetails
+                v-if="activeHabit"
+                :key="activeHabit.id"
+                :habit="activeHabit"
+            />
+        </div>
+        <div class="mt-10">
+            <HabitForm @submit="addHabit" />
+        </div>
     </div>
 </template>

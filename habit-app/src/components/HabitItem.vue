@@ -11,19 +11,11 @@ const emit = defineEmits<{
 </script>
 <template>
     <div
-        class="habit-item"
+        class="w-6 h-6 rounded-full m-2 cursor-pointer transition hover:scale-110"
         :class="{ 'habit-item__active': item.isChecked }"
-        :style="item.isChecked ? { backgroundColor: color } : {}"
+        :style="{
+            backgroundColor: item.isChecked ? color : '#30363d',
+        }"
         @click="$emit('click')"
     />
 </template>
-<style lang="css" scoped>
-.habit-item {
-    margin: 10px;
-    height: 20px;
-    width: 20px;
-    border-radius: 10px;
-    background-color: gray;
-    flex-shrink: 0;
-}
-</style>

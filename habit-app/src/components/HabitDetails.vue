@@ -12,20 +12,32 @@ const { handleClick, progressCount, progressPercent } = useHabitItems(
 )
 </script>
 <template>
-    <h2>{{ habit.title }}</h2>
-    <div class="items">
-        <HabitItem
-            v-for="(item, index) in habit.items"
-            :key="index"
-            :item="item"
-            :color="habit.color"
-            @click="handleClick(index)"
-        />
+    <div class="card p-6">
+        <h2 class="text-2xl font-bold mb-6">{{ habit.title }}</h2>
+        <div class="flex flex-wrap">
+            <HabitItem
+                v-for="(item, index) in habit.items"
+                :key="index"
+                :item="item"
+                :color="habit.color"
+                @click="handleClick(index)"
+            />
+        </div>
+        <div class="mt-6">
+            <div class="w-full h-3 bg-[#30363d] rounded-full overflow-hidden">
+                <div
+                    class="h-full transition-all duration-300"
+                    :style="{
+                        width: progressPercent + '%',
+                        backgroundColor: habit.color,
+                    }"
+                />
+            </div>
+            <p class="text-sm text-gray-400 mt-2">
+                {{ progressCount }} completed
+            </p>
+        </div>
     </div>
-    <div class="progress">
-        <div class="progress-bar" :style="{ width: progressPercent + '%' }" />
-    </div>
-    <p>{{ progressCount }}</p>
 </template>
 
 <style lang="css" scoped>
