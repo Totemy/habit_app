@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import HabitList from './components/HabitList.vue'
+import HabitPage from './components/HabitPage.vue'
 </script>
 
 <template>
     <div class="app">
         <div class="container">
-            <HabitList />
+            <HabitPage />
         </div>
     </div>
 </template>

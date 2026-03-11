@@ -2,98 +2,72 @@ import { computed } from 'vue'
 import type { HabitItem } from '../types/Habit'
 import { createHabitItems } from '../utils/createHabitItems'
 
-export function useHabitItems(habit: HabitItem[]) {
-    /* ---------------- GETTERS ---------------- */
+export function useHabitItems(getItems: () => HabitItem[]) {
+    const items = computed(() => getItems())
 
-    const checkedCount = computed(() => {
-        return habit.filter((i) => i.isChecked).length
-    })
+    const checkedCount = computed(
+        () => items.value.filter((i) => i.isChecked).length,
+    )
 
-    const progressCount = computed(() => {
-        return `${checkedCount.value}/${habit.length}`
-    })
+    const progressCount = computed(
+        () => `${checkedCount.value}/${items.value.length}`,
+    )
 
-    const progressPercent = computed(() => {
-        return (checkedCount.value / habit.length) * 100
-    })
+    const progressPercent = computed(() =>
+        items.value.length
+            ? (checkedCount.value / items.value.length) * 100
+            : 0,
+    )
 
-    const isCompleted = computed(() => {
-        return checkedCount.value == habit.length
-    })
-
-    /* ---------------- ACTIONS ---------------- */
+    const isCompleted = computed(
+        () => checkedCount.value === items.value.length,
+    )
 
     const reset = () => {
-        habit.forEach((element) => (element.isChecked = false))
+        items.value.forEach((i) => (i.isChecked = false))
     }
 
     const handleClick = (index: number) => {
-        habit[index].isChecked = !habit[index].isChecked
+        const item = items.value[index]
+        item.isChecked = !item.isChecked
     }
 
-    // checked only after last checked
     const done = () => {
-        if (!habit.length) return
-
-        let lastCheckedIndex = -1
-
-        for (let i = habit.length - 1; i >= 0; i--) {
-            if (habit[i].isChecked) {
-                lastCheckedIndex = i
-                break
-            }
-        }
-
-        const nextIndex = lastCheckedIndex === -1 ? 0 : lastCheckedIndex + 1
-
-        if (nextIndex < habit.length) {
-            habit[nextIndex].isChecked = true
-        }
-    }
-
-    // checked all habit in pull
-    const doneSuccessively = () => {
-        const index = habit.findIndex((i) => !i.isChecked)
+        const index = items.value.findIndex((i) => !i.isChecked)
 
         if (index !== -1) {
-            habit[index].isChecked = true
+            items.value[index].isChecked = true
         }
-    }
-
-    const doneAll = () => {
-        habit.forEach((item) => {
-            item.isChecked = true
-        })
     }
 
     const undo = () => {
-        const index = habit.map((i) => i.isChecked).lastIndexOf(true)
+        const index = [...items.value].reverse().findIndex((i) => i.isChecked)
 
         if (index !== -1) {
-            habit[index].isChecked = false
+            items.value[items.value.length - 1 - index].isChecked = false
         }
     }
 
     const resizeHabit = (newCount: number) => {
-        const currentLength = habit.length
+        const current = items.value.length
 
-        if (newCount > currentLength) {
-            habit.push(...createHabitItems(newCount - currentLength))
+        if (newCount > current) {
+            items.value.push(...createHabitItems(newCount - current))
         }
-        if (newCount < currentLength) {
-            habit.splice(newCount)
+
+        if (newCount < current) {
+            items.value.splice(newCount)
         }
     }
 
     return {
-        isCompleted,
-        handleClick,
-        done,
-        doneAll,
-        doneSuccessively,
-        progressPercent,
         progressCount,
+        progressPercent,
+        isCompleted,
+
+        handleClick,
         reset,
+        done,
         undo,
         resizeHabit,
     }

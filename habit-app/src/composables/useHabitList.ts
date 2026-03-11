@@ -1,12 +1,19 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { Habit } from '../types/Habit'
 import { createHabit } from '../utils/createHabit'
 
 export function useHabitList() {
     const habits = ref<Habit[]>([])
+    const activeHabitId = ref<string | null>(null)
 
-    const addHabit = (title: string, count: number) => {
-        habits.value.push(createHabit(title, count))
+    const addHabit = (title: string, count: number, color: string) => {
+        const habit = createHabit(title, count, color)
+
+        habits.value.push(habit)
+
+        if (!activeHabitId.value) {
+            activeHabitId.value = habit.id
+        }
     }
 
     const removeHabit = (id: string) => {
@@ -19,8 +26,18 @@ export function useHabitList() {
 
         habit.title = title
     }
+
+    const setActiveHabit = (id: string) => {
+        activeHabitId.value = id
+    }
+    const activeHabit = computed(
+        () => habits.value.find((h) => h.id === activeHabitId.value) || null,
+    )
+
     return {
         habits,
+        activeHabit,
+        setActiveHabit,
         addHabit,
         removeHabit,
         renameHabit,

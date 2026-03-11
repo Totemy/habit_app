@@ -3,13 +3,17 @@ import type { HabitItem } from '../types/Habit'
 
 defineProps<{
     item: HabitItem
+    color: string
 }>()
-defineEmits(['click'])
+const emit = defineEmits<{
+    (e: 'click'): void
+}>()
 </script>
 <template>
     <div
         class="habit-item"
         :class="{ 'habit-item__active': item.isChecked }"
+        :style="item.isChecked ? { backgroundColor: color } : {}"
         @click="$emit('click')"
     />
 </template>
@@ -21,8 +25,5 @@ defineEmits(['click'])
     border-radius: 10px;
     background-color: gray;
     flex-shrink: 0;
-}
-.habit-item__active {
-    background-color: greenyellow;
 }
 </style>
