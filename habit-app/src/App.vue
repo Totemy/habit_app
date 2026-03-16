@@ -4,7 +4,7 @@ import HabitPage from './components/HabitPage.vue'
 
 <template>
     <div class="app">
-        <div class="container">
+        <div class="">
             <HabitPage />
         </div>
     </div>
@@ -14,12 +14,7 @@ import HabitPage from './components/HabitPage.vue'
     background-color: #0d1117;
     color: #f0efdb;
 }
-.container {
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 24px;
-}
+
 @media (max-width: 768px) {
     .container {
         padding: 0 16px;

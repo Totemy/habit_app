@@ -1,11 +1,24 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { Habit } from '../types/Habit'
 
 const props = defineProps<{
     habit: Habit
     active: boolean
 }>()
+
+const emit = defineEmits<{
+    (e: 'delete'): void
+    (e: 'rename', title: string): void
+}>()
+
+const isEditing = ref(false)
+const newTitle = ref(props.habit.title)
+
+const save = () => {
+    emit('rename', newTitle.value)
+    isEditing.value = false
+}
 
 const checked = computed(
     () => props.habit.items.filter((i) => i.isChecked).length,
@@ -29,14 +42,37 @@ const percent = computed(() => {
                 class="w-2 h-2 rounded-full"
                 :style="{ background: habit.color }"
             />
-
-            <span class="flex-1 text-sm font-medium">
-                {{ habit.title }}
-            </span>
-
+            <template v-if="!isEditing">
+                <span class="flex-1 text-sm font-medium">
+                    {{ habit.title }}
+                </span>
+            </template>
+            <template v-else>
+                <input
+                    class="input text-xs flex-1"
+                    v-model="newTitle"
+                    @keyup.enter="save"
+                    @blur="save"
+                />
+            </template>
             <span class="text-xs text-gray-400">
                 {{ checked }}/{{ habit.items.length }}
             </span>
+
+            <div>
+                <button
+                    class="text-xs p-1 rounded-sm transition text-amber-400 hover:text-amber-600 hover:bg-[#444649]"
+                    @click.stop="isEditing = true"
+                >
+                    Edit
+                </button>
+                <button
+                    class="text-xs p-1 rounded-sm transition text-red-500 hover:text-red-600 hover:bg-[#444649]"
+                    @click.stop="emit('delete')"
+                >
+                    Delete
+                </button>
+            </div>
         </div>
 
         <div class="mt-2 h-1 bg-[#30363d] rounded">
