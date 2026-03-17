@@ -1,9 +1,9 @@
 export interface HabitItem {
-    isChecked: boolean
+  isChecked: boolean
 }
 export interface Habit {
-    id: string
-    title: string
-    items: HabitItem[]
-    color: string
+  id: string
+  title: string
+  items: HabitItem[]
+  color: string
 }
