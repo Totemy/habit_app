@@ -14,12 +14,10 @@ const habits = computed(() => habitManager.habits.value)
             v-for="habit in habits"
             :key="habit.id"
             :habit="habit"
-            :active="habitManager.activeHabit.value?.id === habit.id"
-            @click="habitManager.setActiveHabit(habit.id)"
-            @delete="habitManager.removeHabit(habit.id)"
-            @rename="
-                (title: string) => habitManager.renameHabit(habit.id, title)
-            "
+            :active="habitManager.active.value?.id === habit.id"
+            @click="habitManager.setActive(habit.id)"
+            @delete="habitManager.remove(habit.id)"
+            @rename="(title: string) => habitManager.rename(habit.id, title)"
         />
     </div>
 </template>

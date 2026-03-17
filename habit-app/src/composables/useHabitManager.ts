@@ -7,7 +7,7 @@ export function useHabitManager() {
     const habits = ref<Habit[]>([])
     const activeHabitId = ref<string | null>(null)
 
-    const addHabit = (title: string, count: number, color: string) => {
+    const add = (title: string, count: number, color: string) => {
         const habit = createHabit(title, count, color)
 
         habits.value.push(habit)
@@ -17,14 +17,14 @@ export function useHabitManager() {
         }
     }
 
-    const removeHabit = (id: string) => {
+    const remove = (id: string) => {
         habits.value = habits.value.filter((h) => h.id !== id)
 
         if (activeHabitId.value === id) {
             activeHabitId.value = habits.value[0]?.id ?? null
         }
     }
-    const renameHabit = (id: string, title: string) => {
+    const rename = (id: string, title: string) => {
         const habit = habits.value.find((item) => item.id === id)
 
         if (!habit) return
@@ -32,19 +32,19 @@ export function useHabitManager() {
         habit.title = title
     }
 
-    const setActiveHabit = (id: string) => {
+    const setActive = (id: string) => {
         activeHabitId.value = id
     }
-    const activeHabit = computed(
+    const active = computed(
         () => habits.value.find((h) => h.id === activeHabitId.value) || null,
     )
 
     return {
         habits,
-        activeHabit,
-        setActiveHabit,
-        addHabit,
-        removeHabit,
-        renameHabit,
+        active,
+        setActive,
+        add,
+        remove,
+        rename,
     }
 }

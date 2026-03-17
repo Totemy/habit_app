@@ -7,9 +7,9 @@ import HabitSidebar from './HabitSidebar.vue'
 
 const habitManager = useHabitManager()
 provide('habitManager', habitManager)
-habitManager.addHabit('Workout', 7, 'red')
-habitManager.addHabit('English', 5, 'green')
-const activeHabit = computed(() => habitManager.activeHabit.value)
+habitManager.add('Workout', 7, 'red')
+habitManager.add('English', 5, 'green')
+const activeHabit = computed(() => habitManager.active.value)
 </script>
 <template>
     <div class="min-h-screen flex">
@@ -18,7 +18,7 @@ const activeHabit = computed(() => habitManager.activeHabit.value)
             <HabitDetails v-if="activeHabit" :habit="activeHabit" />
         </div>
         <div class="mt-10">
-            <HabitForm @submit="habitManager.addHabit" />
+            <HabitForm @submit="habitManager.add" />
         </div>
     </div>
 </template>
