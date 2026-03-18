@@ -6,6 +6,7 @@ export function useHabitManager() {
   const showCreate = ref(false)
   const habits = ref<Habit[]>([])
   const activeHabitId = ref<string | null>(null)
+  const editingHabitId = ref<string | null>(null)
 
   const add = (title: string, count: number, color: string) => {
     const habit = createHabit(title, count, color)
@@ -30,8 +31,11 @@ export function useHabitManager() {
     if (!habit) return
 
     habit.title = title
+    editingHabitId.value = null
   }
-
+  const markAsEditing = (id: string) => {
+    editingHabitId.value = id
+  }
   const setActive = (id: string) => {
     activeHabitId.value = id
   }
@@ -57,5 +61,8 @@ export function useHabitManager() {
     showCreate,
     openCreate,
     closeCreate,
+    editingHabitId,
+    markAsEditing,
+    activeHabitId,
   }
 }

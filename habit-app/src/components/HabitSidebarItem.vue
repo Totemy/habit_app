@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { Habit } from '../types/Habit'
+import { vFocus } from '../directives/vFocus'
 
 const props = defineProps<{
   habit: Habit
-  active: boolean
+  isActive: boolean
+  isEditing: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'delete'): void
   (e: 'rename', title: string): void
+  (e: 'context', event: MouseEvent): void
+  (e: 'mark-as-editing'): void
 }>()
 
-const isEditing = ref(false)
 const newTitle = ref(props.habit.title)
-
+const handleRightClick = (e: MouseEvent) => {
+  emit('context', e)
+}
 const save = () => {
   emit('rename', newTitle.value)
-  isEditing.value = false
 }
 
 const checked = computed(
@@ -35,7 +39,8 @@ const percent = computed(() => {
 <template>
   <div
     class="p-3 rounded-lg cursor-pointer transition"
-    :class="active ? 'bg-[#21262d]' : 'hover:bg-[#21262d]'"
+    :class="isActive ? 'bg-[#21262d]' : 'hover:bg-[#21262d]'"
+    @contextmenu.prevent.stop="handleRightClick"
   >
     <div class="flex items-center gap-2">
       <div class="w-2 h-2 rounded-full" :style="{ background: habit.color }" />
@@ -50,6 +55,7 @@ const percent = computed(() => {
           v-model="newTitle"
           @keyup.enter="save"
           @blur="save"
+          v-focus
         />
       </template>
       <span class="text-xs text-gray-400">
@@ -59,7 +65,7 @@ const percent = computed(() => {
       <div>
         <button
           class="text-xs p-1 rounded-sm transition text-amber-400 hover:text-amber-600 hover:bg-[#444649]"
-          @click.stop="isEditing = true"
+          @click.stop="emit('mark-as-editing')"
         >
           Edit
         </button>
