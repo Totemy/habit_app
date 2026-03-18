@@ -12,14 +12,11 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'delete'): void
   (e: 'rename', title: string): void
-  (e: 'context', event: MouseEvent): void
   (e: 'mark-as-editing'): void
 }>()
 
 const newTitle = ref(props.habit.title)
-const handleRightClick = (e: MouseEvent) => {
-  emit('context', e)
-}
+
 const save = () => {
   emit('rename', newTitle.value)
 }
@@ -40,7 +37,6 @@ const percent = computed(() => {
   <div
     class="p-3 rounded-lg cursor-pointer transition"
     :class="isActive ? 'bg-[#21262d]' : 'hover:bg-[#21262d]'"
-    @contextmenu.prevent.stop="handleRightClick"
   >
     <div class="flex items-center gap-2">
       <div class="w-2 h-2 rounded-full" :style="{ background: habit.color }" />

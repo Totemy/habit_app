@@ -26,7 +26,7 @@ const habits = computed(() => habitManager.habits.value)
       @rename="(title: string) => habitManager.rename(habit.id, title)"
       @mark-as-editing="habitManager.markAsEditing(habit.id)"
       @contextmenu.prevent="
-        (e) => {
+        (e: MouseEvent) => {
           open(e, getMenu(habit, habitManager))
         }
       "
