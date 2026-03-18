@@ -33,6 +33,7 @@ const habits = computed(() => habitManager.habits.value)
           habitManager.closeCreate()
         }
       "
+      @close="habitManager.closeCreate()"
     />
   </div>
 </template>
