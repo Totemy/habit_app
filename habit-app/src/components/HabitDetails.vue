@@ -7,9 +7,8 @@ const props = defineProps<{
   habit: Habit
 }>()
 
-const { handleClick, progressCount, progressPercent } = useHabitItems(
-  () => props.habit.items,
-)
+const { handleClick, progressCount, progressPercent, done, undo } =
+  useHabitItems(() => props.habit.items)
 </script>
 <template>
   <div class="card p-6">
@@ -34,6 +33,10 @@ const { handleClick, progressCount, progressPercent } = useHabitItems(
         />
       </div>
       <p class="text-sm text-gray-400 mt-2">{{ progressCount }} completed</p>
+    </div>
+    <div>
+      <button class="button" @click="done">Done</button>
+      <button class="button" @click="undo">Undo</button>
     </div>
   </div>
 </template>

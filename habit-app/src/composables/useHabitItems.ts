@@ -44,7 +44,7 @@ export function useHabitItems(getItems: () => HabitItem[]) {
     }
   }
 
-  const resizeHabit = (newCount: number) => {
+  const resize = (newCount: number) => {
     const current = items.value.length
 
     if (newCount > current) {
@@ -65,6 +65,6 @@ export function useHabitItems(getItems: () => HabitItem[]) {
     reset,
     done,
     undo,
-    resizeHabit,
+    resize,
   }
 }
