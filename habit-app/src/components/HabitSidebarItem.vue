@@ -11,11 +11,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'delete'): void
   (e: 'resize', count: number): void
   (e: 'rename', title: string): void
-  (e: 'mark-as-editing'): void
-  (e: 'mark-as-resizing'): void
   (e: 'open-menu', event: MouseEvent): void
 }>()
 

@@ -3,7 +3,7 @@ import HabitPage from './components/HabitPage.vue'
 </script>
 
 <template>
-  <div class="app">
+  <div>
     <div class="">
       <HabitPage />
     </div>

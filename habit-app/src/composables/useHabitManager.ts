@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import type { Habit } from '../types/Habit'
-import { createHabit } from '../utils/createHabit'
-import { createHabitItems } from '../utils/createHabitItems'
+import { createHabit } from '../utils/habitHelper'
+import { createHabitItems } from '../utils/habitHelper'
 
 export function useHabitManager() {
   const showCreate = ref(false)

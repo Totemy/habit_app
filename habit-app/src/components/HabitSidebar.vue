@@ -33,7 +33,6 @@ const selectHabit = (id: string) => {
       @click="selectHabit(habit.id)"
       @rename="(title: string) => habitManager.rename(habit.id, title)"
       @resize="(count: number) => habitManager.resize(habit.id, count)"
-      @mark-as-editing="habitManager.markAsEditing(habit.id)"
       @contextmenu.prevent="
         (e: MouseEvent) => {
           open(e, getMenu(habit, habitManager))
@@ -57,7 +56,7 @@ const selectHabit = (id: string) => {
       @close="habitManager.closeCreate()"
     />
     <Teleport to="body">
-      <ContextMenu v-if="state.visible === true" :state="state" />
+      <ContextMenu v-if="state.visible" :state="state" />
     </Teleport>
   </div>
 </template>

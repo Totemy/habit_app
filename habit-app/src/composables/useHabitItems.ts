@@ -1,46 +1,37 @@
 import { computed } from 'vue'
 import type { HabitItem } from '../types/Habit'
 
-export function useHabitItems(getItems: () => HabitItem[]) {
-  const items = computed(() => getItems())
-
+export function useHabitItems(habitItems: HabitItem[]) {
   const checkedCount = computed(
-    () => items.value.filter((i) => i.isChecked).length,
+    () => habitItems.filter((i) => i.isChecked).length,
   )
 
   const progressCount = computed(
-    () => `${checkedCount.value}/${items.value.length}`,
+    () => `${checkedCount.value}/${habitItems.length}`,
   )
 
   const progressPercent = computed(() =>
-    items.value.length ? (checkedCount.value / items.value.length) * 100 : 0,
+    habitItems.length ? (checkedCount.value / habitItems.length) * 100 : 0,
   )
 
-  const isCompleted = computed(() => checkedCount.value === items.value.length)
+  const isCompleted = computed(() => checkedCount.value === habitItems.length)
 
   const reset = () => {
-    items.value.forEach((i) => (i.isChecked = false))
+    habitItems.forEach((i) => (i.isChecked = false))
   }
 
   const handleClick = (index: number) => {
-    const item = items.value[index]
-    item.isChecked = !item.isChecked
+    habitItems[index].isChecked = !habitItems[index].isChecked
   }
 
   const done = () => {
-    const index = items.value.findIndex((i) => !i.isChecked)
-
-    if (index !== -1) {
-      items.value[index].isChecked = true
-    }
+    const item = habitItems.find((i) => !i.isChecked)
+    if (item) item.isChecked = true
   }
 
   const undo = () => {
-    const index = [...items.value].reverse().findIndex((i) => i.isChecked)
-
-    if (index !== -1) {
-      items.value[items.value.length - 1 - index].isChecked = false
-    }
+    const item = habitItems.find((i) => i.isChecked)
+    if (item) item.isChecked = false
   }
 
   return {

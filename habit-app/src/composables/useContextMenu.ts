@@ -1,4 +1,4 @@
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
 import type { ContextMenuItem } from '../types/ContextMenu'
 
 export const useContextMenu = () => {
@@ -35,9 +35,9 @@ export const useContextMenu = () => {
     window.addEventListener('keydown', handleEsc)
   })
 
-  onBeforeMount(() => {
+  onUnmounted(() => {
     window.removeEventListener('click', handleClickOutside)
-    window.addEventListener('keydown', handleEsc)
+    window.removeEventListener('keydown', handleEsc)
   })
 
   return {

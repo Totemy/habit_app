@@ -49,7 +49,11 @@ const sidebarOpen = ref(false)
         <span class="font-semibold">{{ activeHabit?.title ?? 'Habits' }}</span>
       </header>
       <div class="page">
-        <HabitDetails v-if="activeHabit" :habit="activeHabit" />
+        <HabitDetails
+          v-if="activeHabit"
+          :habit="activeHabit"
+          :key="activeHabit.id"
+        />
       </div>
     </div>
   </div>

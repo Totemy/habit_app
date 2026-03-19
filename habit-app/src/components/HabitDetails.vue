@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 
 const { handleClick, progressCount, progressPercent, done, undo, reset } =
-  useHabitItems(() => props.habit.items)
+  useHabitItems(props.habit.items)
 
 const showSuccess = ref(false)
 
@@ -42,9 +42,9 @@ watch(progressPercent, (value) => {
       <p class="text-sm text-gray-400 mt-2">{{ progressCount }} completed</p>
     </div>
     <div>
-      <button class="button" @click="done">Done</button>
-      <button class="button" @click="undo">Undo</button>
-      <button class="button" @click="reset">Reset</button>
+      <button class="button m-1" @click="done">Check it</button>
+      <button class="button m-1" @click="undo">Undo one</button>
+      <button class="button m-1" @click="reset">Reset</button>
     </div>
     <Teleport to="body">
       <div
@@ -52,7 +52,7 @@ watch(progressPercent, (value) => {
         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       >
         <div class="card p-8 flex flex-col items-center gap-4">
-          <p class="text-2x1 font-bold">All done!!!</p>
+          <p class="text-2xl font-bold">All done!!!</p>
           <button class="button" @click="showSuccess = false">Ok</button>
         </div>
       </div>
