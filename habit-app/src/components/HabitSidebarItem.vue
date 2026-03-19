@@ -16,6 +16,7 @@ const emit = defineEmits<{
   (e: 'rename', title: string): void
   (e: 'mark-as-editing'): void
   (e: 'mark-as-resizing'): void
+  (e: 'open-menu', event: MouseEvent): void
 }>()
 
 const newTitle = ref(props.habit.title)
@@ -76,6 +77,21 @@ const percent = computed(() => {
           {{ checked }}/{{ habit.items.length }}
         </span>
       </template>
+      <button
+        class="md:hidden ml-1 text-gray-400 hover:text-white transition p-1"
+        @click.stop="emit('open-menu', $event)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <circle cx="5" cy="12" r="2" />
+          <circle cx="12" cy="12" r="2" />
+          <circle cx="19" cy="12" r="2" />
+        </svg>
+      </button>
     </div>
 
     <div class="mt-2 h-1 bg-[#30363d] rounded">

@@ -7,12 +7,19 @@ import { useContextMenu } from '../composables/useContextMenu'
 import { getMenu } from '../utils/getHabitMenu'
 import ContextMenu from './ContextMenu.vue'
 
+const emit = defineEmits<{ (e: 'close'): void }>()
+
 const habitManager = inject<ReturnType<typeof useHabitManager>>('habitManager')
 if (!habitManager) throw new Error('habitManager not provided')
 
 const { state, open } = useContextMenu()
 
 const habits = computed(() => habitManager.habits.value)
+
+const selectHabit = (id: string) => {
+  habitManager.setActive(id)
+  emit('close')
+}
 </script>
 <template>
   <div class="space-y-3">
@@ -23,7 +30,7 @@ const habits = computed(() => habitManager.habits.value)
       :is-active="habitManager.activeHabitId.value === habit.id"
       :is-editing="habitManager.editingHabitId.value === habit.id"
       :is-resizing="habitManager.resizeHabitId.value === habit.id"
-      @click="habitManager.setActive(habit.id)"
+      @click="selectHabit(habit.id)"
       @rename="(title: string) => habitManager.rename(habit.id, title)"
       @resize="(count: number) => habitManager.resize(habit.id, count)"
       @mark-as-editing="habitManager.markAsEditing(habit.id)"
@@ -32,6 +39,7 @@ const habits = computed(() => habitManager.habits.value)
           open(e, getMenu(habit, habitManager))
         }
       "
+      @open-menu="(e: MouseEvent) => open(e, getMenu(habit, habitManager))"
     />
 
     <button class="button w-full mt-4" @click="habitManager.openCreate()">
@@ -48,6 +56,8 @@ const habits = computed(() => habitManager.habits.value)
       "
       @close="habitManager.closeCreate()"
     />
-    <ContextMenu v-if="state.visible === true" :state="state" />
+    <Teleport to="body">
+      <ContextMenu v-if="state.visible === true" :state="state" />
+    </Teleport>
   </div>
 </template>
