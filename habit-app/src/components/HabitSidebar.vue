@@ -22,8 +22,10 @@ const habits = computed(() => habitManager.habits.value)
       :habit="habit"
       :is-active="habitManager.activeHabitId.value === habit.id"
       :is-editing="habitManager.editingHabitId.value === habit.id"
+      :is-resizing="habitManager.resizeHabitId.value === habit.id"
       @click="habitManager.setActive(habit.id)"
       @rename="(title: string) => habitManager.rename(habit.id, title)"
+      @resize="(count: number) => habitManager.resize(habit.id, count)"
       @mark-as-editing="habitManager.markAsEditing(habit.id)"
       @contextmenu.prevent="
         (e: MouseEvent) => {

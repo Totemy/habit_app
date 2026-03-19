@@ -1,6 +1,5 @@
 import { computed } from 'vue'
 import type { HabitItem } from '../types/Habit'
-import { createHabitItems } from '../utils/createHabitItems'
 
 export function useHabitItems(getItems: () => HabitItem[]) {
   const items = computed(() => getItems())
@@ -44,18 +43,6 @@ export function useHabitItems(getItems: () => HabitItem[]) {
     }
   }
 
-  const resize = (newCount: number) => {
-    const current = items.value.length
-
-    if (newCount > current) {
-      items.value.push(...createHabitItems(newCount - current))
-    }
-
-    if (newCount < current) {
-      items.value.splice(newCount)
-    }
-  }
-
   return {
     progressCount,
     progressPercent,
@@ -65,6 +52,5 @@ export function useHabitItems(getItems: () => HabitItem[]) {
     reset,
     done,
     undo,
-    resize,
   }
 }

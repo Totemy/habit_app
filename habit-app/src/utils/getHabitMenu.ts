@@ -11,6 +11,10 @@ export const getMenu = (
     action: () => manager.markAsEditing(habit.id),
   },
   {
+    label: 'Resize',
+    action: () => manager.markAsResizing(habit.id),
+  },
+  {
     label: 'Delete',
     action: () => manager.remove(habit.id),
   },
