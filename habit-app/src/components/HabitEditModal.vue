@@ -1,23 +1,31 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Habit } from '../types/Habit'
+import type { Habit, HabitShape } from '../types/Habit'
+import { defaultShapes } from '../utils/shapes'
 
 const props = defineProps<{
   habit: Habit
 }>()
 
 const emit = defineEmits<{
-  (e: 'save', title: string, count: number, color: string): void
+  (
+    e: 'save',
+    title: string,
+    count: number,
+    color: string,
+    shape: HabitShape,
+  ): void
   (e: 'close'): void
 }>()
 
 const title = ref(props.habit.title)
 const count = ref(props.habit.items.length)
 const color = ref(props.habit.color)
+const shape = ref<HabitShape>(props.habit.shape)
 
 const handleSave = () => {
   if (!title.value.trim()) return
-  emit('save', title.value, count.value, color.value)
+  emit('save', title.value, count.value, color.value, shape.value)
 }
 </script>
 
@@ -48,6 +56,32 @@ const handleSave = () => {
               }
             "
           />
+          <p class="text-sm mb-2 text-gray-400">Shape</p>
+          <div class="flex gap-2 flex-wrap">
+            <button
+              v-for="(defaultShape, key) in defaultShapes"
+              :key="key"
+              class="px-3 py-1 rounded text-sm border transition"
+              :class="
+                shape === defaultShape.type
+                  ? 'border-blue-500 bg-blue-500/20 text-white'
+                  : 'border-[#30363d] text-gray-400 hover:border-gray-500'
+              "
+              @click="shape = defaultShape.type"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-6 h-6 m-2 cursor-pointer transition hover:scale-110"
+                viewBox="0 0 24 24"
+                :style="{
+                  fill: color,
+                  filter: `drop-shadow(0 0 4px ${color})`,
+                }"
+                v-html="defaultShape.svgIcon"
+              />
+              {{ defaultShape.label }}
+            </button>
+          </div>
 
           <div class="flex items-center gap-3">
             <p class="text-sm">Color:</p>

@@ -1,5 +1,5 @@
 import { computed, ref, watch } from 'vue'
-import type { Habit } from '../types/Habit'
+import type { Habit, HabitShape } from '../types/Habit'
 import { createHabit, createHabitItems } from '../utils/habitHelper'
 
 const STORAGE_KEY = 'habits'
@@ -60,13 +60,24 @@ export function useHabitManager() {
     }
   }
 
-  const edit = (id: string, title: string, count: number, color: string) => {
-    const habit = findHabit(id)
+  const edit = (
+    id: string,
+    title: string,
+    newCount: number,
+    color: string,
+    shape: HabitShape,
+  ) => {
+    const habit = habits.value.find((h) => h.id === id)
     if (!habit) return
 
     habit.title = title
     habit.color = color
-    updateItemsCount(habit, count)
+    habit.shape = shape
+
+    const current = habit.items.length
+    if (newCount > current)
+      habit.items.push(...createHabitItems(newCount - current))
+    if (newCount < current) habit.items.splice(newCount)
   }
 
   const rename = (id: string, title: string) => {

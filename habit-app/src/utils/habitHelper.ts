@@ -1,13 +1,15 @@
-import type { Habit, HabitItem } from '../types/Habit'
+import type { Habit, HabitItem, HabitShape } from '../types/Habit'
 
 export const createHabit = (
   title: string,
   count: number,
   color: string,
+  shape: HabitShape = 'circle',
 ): Habit => ({
   id: crypto.randomUUID(),
   title,
   color,
+  shape,
   items: createHabitItems(count),
 })
 

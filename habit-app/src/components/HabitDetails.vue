@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref, Teleport, watch } from 'vue'
 import { useHabitItems } from '../composables/useHabitItems'
-import type { Habit } from '../types/Habit'
+import type { Habit, HabitShape } from '../types/Habit'
 import HabitItem from './HabitItem.vue'
 import type { useHabitManager } from '../composables/useHabitManager'
 import HabitEditModal from './HabitEditModal.vue'
@@ -21,8 +21,13 @@ watch(progressPercent, (value) => {
   if (value === 100) showSuccess.value = true
 })
 
-const handleSave = (title: string, count: number, color: string) => {
-  habitManager?.edit(props.habit.id, title, count, color)
+const handleSave = (
+  title: string,
+  count: number,
+  color: string,
+  shape: HabitShape,
+) => {
+  habitManager?.edit(props.habit.id, title, count, color, shape)
   showEdit.value = false
 }
 </script>
@@ -62,6 +67,7 @@ const handleSave = (title: string, count: number, color: string) => {
         :key="index"
         :item="item"
         :color="habit.color"
+        :shape="habit.shape"
         @click="handleClick(index)"
       />
     </div>
