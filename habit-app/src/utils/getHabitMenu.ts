@@ -19,12 +19,7 @@ export const getMenu = (
     action: () => manager.remove(habit.id),
   },
   {
-    label: 'More',
-    children: [
-      {
-        label: 'Duplicate',
-        action: () => console.log('duplicate'),
-      },
-    ],
+    label: 'Duplicate',
+    action: () => manager.duplicate(habit.id),
   },
 ]

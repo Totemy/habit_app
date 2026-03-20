@@ -39,6 +39,20 @@ export function useHabitManager() {
     }
   }
 
+  const duplicate = (id: string) => {
+    const habit = findHabit(id)
+
+    if (!habit) return
+
+    const newHabit: Habit = {
+      ...habit,
+      id: crypto.randomUUID(),
+      title: habit.title + '(copy)',
+      items: habit.items.map((item) => ({ ...item })),
+    }
+    habits.value.push(newHabit)
+  }
+
   // auto-save
   watch(habits, () => saveHabits(), { deep: true })
 
@@ -130,6 +144,7 @@ export function useHabitManager() {
     edit,
     rename,
     resize,
+    duplicate,
 
     // UI state
     setActive,
