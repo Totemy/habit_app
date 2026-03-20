@@ -29,7 +29,7 @@ const selectHabit = (id: string) => {
       :habit="habit"
       :is-active="habitManager.activeHabitId.value === habit.id"
       :is-editing="habitManager.editingHabitId.value === habit.id"
-      :is-resizing="habitManager.resizeHabitId.value === habit.id"
+      :is-resizing="habitManager.resizingHabitId.value === habit.id"
       @click="selectHabit(habit.id)"
       @rename="(title: string) => habitManager.rename(habit.id, title)"
       @resize="(count: number) => habitManager.resize(habit.id, count)"

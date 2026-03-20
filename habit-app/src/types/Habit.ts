@@ -6,4 +6,5 @@ export interface Habit {
   title: string
   items: HabitItem[]
   color: string
+  description?: string
 }

@@ -1,45 +1,38 @@
 import { computed, ref } from 'vue'
 import type { Habit } from '../types/Habit'
-import { createHabit } from '../utils/habitHelper'
-import { createHabitItems } from '../utils/habitHelper'
+import { createHabit, createHabitItems } from '../utils/habitHelper'
 
 export function useHabitManager() {
   const showCreate = ref(false)
   const habits = ref<Habit[]>([])
+
   const activeHabitId = ref<string | null>(null)
   const editingHabitId = ref<string | null>(null)
-  const resizeHabitId = ref<string | null>(null)
+  const resizingHabitId = ref<string | null>(null)
 
-  const markAsResizing = (id: string) => {
-    resizeHabitId.value = id
+  //  helpers
+  const findHabit = (id: string) => habits.value.find((h) => h.id === id)
+
+  const updateItemsCount = (habit: Habit, newCount: number) => {
+    const current = habit.items.length
+
+    if (newCount > current) {
+      habit.items.push(...createHabitItems(newCount - current))
+    } else if (newCount < current) {
+      habit.items.splice(newCount)
+    }
   }
 
+  //  actions
   const add = (title: string, count: number, color: string) => {
     const habit = createHabit(title, count, color)
-
     habits.value.push(habit)
 
     if (!activeHabitId.value) {
       activeHabitId.value = habit.id
     }
   }
-  const resize = (id: string, newCount: number) => {
-    const habit = habits.value.find((h) => h.id === id)
 
-    if (!habit) return
-
-    const current = habit.items.length
-
-    if (newCount > current) {
-      habit.items.push(...createHabitItems(newCount - current))
-    }
-
-    if (newCount < current) {
-      habit.items.splice(newCount)
-    }
-
-    resizeHabitId.value = null
-  }
   const remove = (id: string) => {
     habits.value = habits.value.filter((h) => h.id !== id)
 
@@ -47,47 +40,72 @@ export function useHabitManager() {
       activeHabitId.value = habits.value[0]?.id ?? null
     }
   }
-  const rename = (id: string, title: string) => {
-    const habit = habits.value.find((item) => item.id === id)
 
+  const edit = (id: string, title: string, count: number, color: string) => {
+    const habit = findHabit(id)
+    if (!habit) return
+
+    habit.title = title
+    habit.color = color
+    updateItemsCount(habit, count)
+  }
+
+  const rename = (id: string, title: string) => {
+    const habit = findHabit(id)
     if (!habit) return
 
     habit.title = title
     editingHabitId.value = null
   }
-  const markAsEditing = (id: string) => {
-    editingHabitId.value = id
+
+  const resize = (id: string, count: number) => {
+    const habit = findHabit(id)
+    if (!habit) return
+
+    updateItemsCount(habit, count)
+    resizingHabitId.value = null
   }
+
+  //  state setters
   const setActive = (id: string) => {
     activeHabitId.value = id
   }
-  const active = computed(
-    () => habits.value.find((h) => h.id === activeHabitId.value) || null,
-  )
 
-  const openCreate = () => {
-    showCreate.value = true
+  const markAsEditing = (id: string) => {
+    editingHabitId.value = id
   }
 
-  const closeCreate = () => {
-    showCreate.value = false
+  const markAsResizing = (id: string) => {
+    resizingHabitId.value = id
   }
+
+  const openCreate = () => (showCreate.value = true)
+  const closeCreate = () => (showCreate.value = false)
+
+  //  computed
+  const active = computed(() => findHabit(activeHabitId.value ?? '') ?? null)
 
   return {
+    // state
     habits,
     active,
-    setActive,
+    activeHabitId,
+    editingHabitId,
+    resizingHabitId,
+    showCreate,
+
+    // actions
     add,
     remove,
+    edit,
     rename,
     resize,
-    showCreate,
+
+    // UI state
+    setActive,
+    markAsEditing,
+    markAsResizing,
     openCreate,
     closeCreate,
-    editingHabitId,
-    markAsEditing,
-    activeHabitId,
-    resizeHabitId,
-    markAsResizing,
   }
 }
