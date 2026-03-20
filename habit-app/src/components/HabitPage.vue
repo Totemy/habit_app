@@ -6,8 +6,6 @@ import HabitSidebar from './HabitSidebar.vue'
 
 const habitManager = useHabitManager()
 provide('habitManager', habitManager)
-habitManager.add('Workout', 7, 'red')
-habitManager.add('English', 5, 'green')
 const activeHabit = computed(() => habitManager.active.value)
 const sidebarOpen = ref(false)
 </script>

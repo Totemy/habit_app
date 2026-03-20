@@ -1,16 +1,32 @@
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { Habit } from '../types/Habit'
 import { createHabit, createHabitItems } from '../utils/habitHelper'
 
+const STORAGE_KEY = 'habits'
+
 export function useHabitManager() {
   const showCreate = ref(false)
-  const habits = ref<Habit[]>([])
 
   const activeHabitId = ref<string | null>(null)
   const editingHabitId = ref<string | null>(null)
   const resizingHabitId = ref<string | null>(null)
 
   //  helpers
+  const loadHabits = (): Habit[] => {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY)
+      return data ? JSON.parse(data) : []
+    } catch {
+      return []
+    }
+  }
+
+  const saveHabits = () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(habits.value))
+  }
+
+  const habits = ref<Habit[]>(loadHabits())
+
   const findHabit = (id: string) => habits.value.find((h) => h.id === id)
 
   const updateItemsCount = (habit: Habit, newCount: number) => {
@@ -22,6 +38,9 @@ export function useHabitManager() {
       habit.items.splice(newCount)
     }
   }
+
+  // auto-save
+  watch(habits, () => saveHabits(), { deep: true })
 
   //  actions
   const add = (title: string, count: number, color: string) => {
