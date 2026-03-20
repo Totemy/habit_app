@@ -30,7 +30,7 @@ export function useHabitItems(habitItems: HabitItem[]) {
   }
 
   const undo = () => {
-    const item = habitItems.find((i) => i.isChecked)
+    const item = [...habitItems].reverse().find((i) => i.isChecked)
     if (item) item.isChecked = false
   }
 

@@ -75,7 +75,7 @@ const percent = computed(() => {
         </span>
       </template>
       <button
-        class="md:hidden ml-1 text-gray-400 hover:text-white transition p-1"
+        class="ml-1 text-gray-400 hover:text-white transition p-1"
         @click.stop="emit('open-menu', $event)"
       >
         <svg

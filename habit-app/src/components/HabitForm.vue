@@ -7,7 +7,7 @@ const emit = defineEmits<{
 }>()
 
 const title = ref('')
-const count = ref(1)
+const count = ref(8)
 const color = ref('#59c217')
 
 const handleSubmit = () => {

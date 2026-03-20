@@ -5,6 +5,7 @@ import type { Habit, HabitShape } from '../types/Habit'
 import HabitItem from './HabitItem.vue'
 import type { useHabitManager } from '../composables/useHabitManager'
 import HabitEditModal from './HabitEditModal.vue'
+import ConfettiCanvas from './Confetticanvas.vue'
 
 const props = defineProps<{
   habit: Habit
@@ -35,6 +36,7 @@ const handleSave = (
   <div class="card p-6">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold">{{ habit.title }}</h2>
+      <p>{{ habit.description }}</p>
       <button
         class="text-gray-400 hover:text-white transition p-1"
         @click="showEdit = true"
@@ -99,7 +101,8 @@ const handleSave = (
         v-if="showSuccess"
         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       >
-        <div class="card p-8 flex flex-col items-center gap-4">
+        <ConfettiCanvas />
+        <div class="card p-8 flex flex-col items-center gap-4 z-[52]">
           <p class="text-2xl font-bold">All done!!!</p>
           <button class="button" @click="showSuccess = false">Ok</button>
         </div>
