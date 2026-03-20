@@ -71,7 +71,7 @@ const handleSave = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-6 h-6 m-2 cursor-pointer transition hover:scale-110"
+                class="w-6 h-6 m-2 mx-auto cursor-pointer transition hover:scale-110"
                 viewBox="0 0 24 24"
                 :style="{
                   fill: color,
@@ -79,7 +79,9 @@ const handleSave = () => {
                 }"
                 v-html="defaultShape.svgIcon"
               />
-              {{ defaultShape.label }}
+              <div class="min-w-14">
+                {{ defaultShape.label }}
+              </div>
             </button>
           </div>
 
