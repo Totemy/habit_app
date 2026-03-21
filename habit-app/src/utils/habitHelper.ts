@@ -5,12 +5,14 @@ export const createHabit = (
   count: number,
   color: string,
   shape: HabitShape = 'circle',
+  description: string,
 ): Habit => ({
   id: crypto.randomUUID(),
   title,
   color,
   shape,
   items: createHabitItems(count),
+  description,
 })
 
 export const createHabitItems = (count: number): HabitItem[] => {

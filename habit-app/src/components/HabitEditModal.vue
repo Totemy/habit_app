@@ -14,6 +14,7 @@ const emit = defineEmits<{
     count: number,
     color: string,
     shape: HabitShape,
+    description: string,
   ): void
   (e: 'close'): void
 }>()
@@ -21,11 +22,19 @@ const emit = defineEmits<{
 const title = ref(props.habit.title)
 const count = ref(props.habit.items.length)
 const color = ref(props.habit.color)
+const description = ref(props.habit.description)
 const shape = ref<HabitShape>(props.habit.shape)
 
 const handleSave = () => {
   if (!title.value.trim()) return
-  emit('save', title.value, count.value, color.value, shape.value)
+  emit(
+    'save',
+    title.value,
+    count.value,
+    color.value,
+    shape.value,
+    description.value,
+  )
 }
 </script>
 
@@ -44,7 +53,12 @@ const handleSave = () => {
             placeholder="Habit name"
             class="input"
           />
-
+          <input
+            v-model="description"
+            type="text"
+            placeholder="description..."
+            class="input"
+          />
           <input
             v-model.number="count"
             type="number"

@@ -27,8 +27,9 @@ const handleSave = (
   count: number,
   color: string,
   shape: HabitShape,
+  description: string,
 ) => {
-  habitManager?.edit(props.habit.id, title, count, color, shape)
+  habitManager?.edit(props.habit.id, title, count, color, shape, description)
   showEdit.value = false
 }
 </script>
@@ -36,7 +37,6 @@ const handleSave = (
   <div class="card p-6">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold">{{ habit.title }}</h2>
-      <p>{{ habit.description }}</p>
       <button
         class="text-gray-400 hover:text-white transition p-1"
         @click="showEdit = true"
@@ -62,6 +62,9 @@ const handleSave = (
           />
         </svg>
       </button>
+    </div>
+    <div class="flex flex-wrap">
+      <p>{{ habit.description }}</p>
     </div>
     <div class="flex flex-wrap">
       <HabitItem

@@ -15,7 +15,12 @@ export function useHabitManager() {
   const loadHabits = (): Habit[] => {
     try {
       const data = localStorage.getItem(STORAGE_KEY)
-      return data ? JSON.parse(data) : []
+      const parsed = data ? JSON.parse(data) : []
+
+      return parsed.map((habit: Habit) => ({
+        ...habit,
+        description: habit.description ?? '',
+      }))
     } catch {
       return []
     }
@@ -48,6 +53,7 @@ export function useHabitManager() {
       ...habit,
       id: crypto.randomUUID(),
       title: habit.title + '(copy)',
+      description: habit.description,
       items: habit.items.map((item) => ({ ...item })),
     }
     habits.value.push(newHabit)
@@ -57,9 +63,16 @@ export function useHabitManager() {
   watch(habits, () => saveHabits(), { deep: true })
 
   //  actions
-  const add = (title: string, count: number, color: string) => {
-    const habit = createHabit(title, count, color)
+  const add = (
+    title: string,
+    count: number,
+    color: string,
+    shape: HabitShape,
+    description: string,
+  ) => {
+    const habit = createHabit(title, count, color, shape, description)
     habits.value.push(habit)
+    activeHabitId.value = habit.id
 
     if (!activeHabitId.value) {
       activeHabitId.value = habit.id
@@ -80,6 +93,7 @@ export function useHabitManager() {
     newCount: number,
     color: string,
     shape: HabitShape,
+    description: string,
   ) => {
     const habit = habits.value.find((h) => h.id === id)
     if (!habit) return
@@ -87,6 +101,7 @@ export function useHabitManager() {
     habit.title = title
     habit.color = color
     habit.shape = shape
+    habit.description = description
 
     const current = habit.items.length
     if (newCount > current)
