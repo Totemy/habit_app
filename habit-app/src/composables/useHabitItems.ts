@@ -21,7 +21,8 @@ export function useHabitItems(habitItems: HabitItem[]) {
   }
 
   const handleClick = (index: number) => {
-    habitItems[index].isChecked = !habitItems[index].isChecked
+    if (habitItems[index])
+      habitItems[index].isChecked = !habitItems[index].isChecked
   }
 
   const done = () => {

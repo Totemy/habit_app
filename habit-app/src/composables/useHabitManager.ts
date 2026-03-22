@@ -68,9 +68,9 @@ export function useHabitManager() {
     count: number,
     color: string,
     shape: HabitShape,
-    description: string,
+    description?: string,
   ) => {
-    const habit = createHabit(title, count, color, shape, description)
+    const habit = createHabit(title, count, color, shape, description ?? '')
     habits.value.push(habit)
     activeHabitId.value = habit.id
 

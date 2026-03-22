@@ -9,5 +9,5 @@ export interface Habit {
   items: HabitItem[]
   color: string
   shape: HabitShape
-  description?: string
+  description: string
 }

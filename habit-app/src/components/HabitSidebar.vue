@@ -48,8 +48,8 @@ const selectHabit = (id: string) => {
     <HabitForm
       v-if="habitManager.showCreate.value"
       @submit="
-        (title, count, color, shape) => {
-          habitManager.add(title, count, color, shape, description)
+        (title, count, color, shape, description) => {
+          habitManager.add(title, count, color, shape, description ?? '')
           habitManager.closeCreate()
         }
       "

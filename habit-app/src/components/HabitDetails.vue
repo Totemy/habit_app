@@ -5,7 +5,7 @@ import type { Habit, HabitShape } from '../types/Habit'
 import HabitItem from './HabitItem.vue'
 import type { useHabitManager } from '../composables/useHabitManager'
 import HabitEditModal from './HabitEditModal.vue'
-import ConfettiCanvas from './Confetticanvas.vue'
+import ConfettiCanvas from './ConfettiCanvas.vue'
 
 const props = defineProps<{
   habit: Habit
@@ -27,9 +27,16 @@ const handleSave = (
   count: number,
   color: string,
   shape: HabitShape,
-  description: string,
+  description?: string,
 ) => {
-  habitManager?.edit(props.habit.id, title, count, color, shape, description)
+  habitManager?.edit(
+    props.habit.id,
+    title,
+    count,
+    color,
+    shape,
+    description ?? '',
+  )
   showEdit.value = false
 }
 </script>

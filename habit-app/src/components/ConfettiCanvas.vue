@@ -43,14 +43,14 @@ function launch() {
     y: -20 - Math.random() * 100,
     vx: (Math.random() - 0.5) * 4,
     vy: 2 + Math.random() * 4,
-    color: colors[Math.floor(Math.random() * colors.length)],
+    color: colors[Math.floor(Math.random() * colors.length)]!,
     size: 6 + Math.random() * 8,
     rotation: Math.random() * Math.PI * 2,
     rotationSpeed: (Math.random() - 0.5) * 0.2,
     opacity: 1,
     shape: (['rect', 'circle', 'strip'] as const)[
       Math.floor(Math.random() * 3)
-    ],
+    ]!,
   }))
 
   const draw = () => {

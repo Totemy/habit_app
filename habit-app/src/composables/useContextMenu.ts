@@ -1,4 +1,4 @@
-import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import type { ContextMenuItem } from '../types/ContextMenu'
 
 export const useContextMenu = () => {

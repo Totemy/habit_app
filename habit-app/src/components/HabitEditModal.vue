@@ -14,7 +14,7 @@ const emit = defineEmits<{
     count: number,
     color: string,
     shape: HabitShape,
-    description: string,
+    description?: string,
   ): void
   (e: 'close'): void
 }>()
