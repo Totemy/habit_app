@@ -20,9 +20,12 @@ const count = ref(8)
 const color = ref('#59c217')
 const shape = ref<HabitShape>('circle')
 const description = ref('')
+const submitted = ref(false)
 
 const handleSubmit = () => {
+  submitted.value = true
   if (error.value) return
+  submitted.value = false
 
   emit(
     'submit',
@@ -40,6 +43,7 @@ const handleSubmit = () => {
   description.value = ''
 }
 const error = computed(() => {
+  if (!submitted.value) return ''
   return title.value.trim() ? '' : 'Title is required'
 })
 
@@ -55,6 +59,7 @@ const safeCount = computed({
     <h3 class="text-lg font-semibold mb-4">Create Habit</h3>
 
     <div class="space-y-3">
+      <p class="text-sm mb-2 text-gray-400">Habit name:</p>
       <input
         v-model="title"
         type="text"
@@ -63,13 +68,14 @@ const safeCount = computed({
         :class="error && 'border-red-500  animate-[shake_0.2s]'"
       />
       <p v-if="error" class="text-xs text-red-500 -mt-2">{{ error }}</p>
+      <p class="text-sm mb-2 text-gray-400">About this habit:</p>
       <input
         v-model="description"
         type="text"
         placeholder="description (optional)"
         class="input"
       />
-
+      <p class="text-sm mb-2 text-gray-400">Daily goal:</p>
       <input
         v-model.number="safeCount"
         type="number"
@@ -82,7 +88,7 @@ const safeCount = computed({
         "
       />
 
-      <p class="text-sm mb-2 text-gray-400">Shape</p>
+      <p class="text-sm mb-2 text-gray-400">Shape :</p>
       <div class="flex gap-2 flex-wrap">
         <button
           type="button"
