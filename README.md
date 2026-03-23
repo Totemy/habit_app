@@ -4,6 +4,8 @@ A habit tracking application built with Vue 3.
 Focused on state management, user interaction, and clean UI.
 
 ---
+Demo : [link](https://ishabit-app.netlify.app/)
+---
 
 ## 🚀 Features
 
