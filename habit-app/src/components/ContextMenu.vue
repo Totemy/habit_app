@@ -15,7 +15,7 @@ defineProps<{
 <template>
   <div
     v-if="state.visible"
-    class="fixed bg-[#161b22] border border-[#30363d] rounded shadow-lg z-50 min-w-[160px]"
+    class="fixed bg-surface border border-border rounded shadow-lg z-50 min-w-40"
     :style="{ top: state.y + 'px', left: state.x + 'px' }"
   >
     <MenuItem v-for="(item, index) in state.items" :key="index" :item="item" />

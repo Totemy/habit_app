@@ -15,7 +15,7 @@ const emit = defineEmits<{
   <div
     v-if="shape === 'circle'"
     class="w-6 h-6 rounded-full m-2 cursor-pointer transition hover:scale-110"
-    :style="{ backgroundColor: item.isChecked ? color : '#30363d' }"
+    :style="{ backgroundColor: item.isChecked ? color : 'var(--color-border)' }"
     @click="$emit('click')"
   />
   <svg
@@ -28,7 +28,7 @@ const emit = defineEmits<{
   >
     <g
       :style="{
-        fill: item.isChecked ? color : '#30363d',
+        fill: item.isChecked ? color : 'var(--color-border)',
         filter: item.isChecked ? `drop-shadow(0 0 4px ${color})` : 'none',
       }"
       v-html="defaultShapes.find((i) => i.type === shape)?.svgIcon"

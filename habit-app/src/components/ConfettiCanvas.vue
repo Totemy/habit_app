@@ -17,6 +17,14 @@ interface Particle {
   shape: 'rect' | 'circle' | 'strip'
 }
 
+function readThemeColor(token: string, fallback: string) {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(token)
+    .trim()
+
+  return value || fallback
+}
+
 function launch() {
   const canvas = canvasRef.value
   if (!canvas) return
@@ -26,16 +34,16 @@ function launch() {
 
   const ctx = canvas.getContext('2d')!
   const colors = [
-    '#ff6b6b',
-    '#ffd93d',
-    '#6bcb77',
-    '#4d96ff',
-    '#ff922b',
-    '#cc5de8',
-    '#20c997',
-    '#f06595',
-    '#74c0fc',
-    '#a9e34b',
+    readThemeColor('--color-confetti-red', '#ff6b6b'),
+    readThemeColor('--color-confetti-yellow', '#ffd93d'),
+    readThemeColor('--color-confetti-green', '#6bcb77'),
+    readThemeColor('--color-confetti-blue', '#4d96ff'),
+    readThemeColor('--color-confetti-orange', '#ff922b'),
+    readThemeColor('--color-confetti-purple', '#cc5de8'),
+    readThemeColor('--color-confetti-teal', '#20c997'),
+    readThemeColor('--color-confetti-pink', '#f06595'),
+    readThemeColor('--color-confetti-sky', '#74c0fc'),
+    readThemeColor('--color-confetti-lime', '#a9e34b'),
   ]
 
   const particles: Particle[] = Array.from({ length: 160 }, () => ({

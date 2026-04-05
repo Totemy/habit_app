@@ -15,14 +15,14 @@ const showSub = ref(false)
     @mouseleave="showSub = false"
   >
     <button
-      class="flex justify-between w-full px-4 py-2 hover:bg-[#21262d]"
+      class="flex justify-between w-full px-4 py-2 hover:bg-surface-hover"
       @click="item.action && item.action()"
     >
       <span>{{ item.label }}</span>
       <span v-if="item.children">> </span>
     </button>
     <div
-      class="absolute top-0 left-full ml-1 bg-[#161b22] border border-[#30363d] rounded shadow-lg min-w-[160px]"
+      class="absolute top-0 left-full ml-1 bg-surface border border-border rounded shadow-lg min-w-40"
       v-if="item.children && showSub"
     >
       <ContextMenuItem

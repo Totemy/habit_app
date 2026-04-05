@@ -98,7 +98,7 @@ const safeCount = computed({
           :class="
             shape === defaultShape.type
               ? 'border-blue-500 bg-blue-500/20 text-white'
-              : 'border-[#30363d] text-gray-400 hover:border-gray-500'
+              : 'border-border text-gray-400 hover:border-gray-500'
           "
           @click="shape = defaultShape.type"
         >

@@ -84,7 +84,7 @@ const handleSave = (
       />
     </div>
     <div class="mt-6">
-      <div class="w-full h-3 bg-[#30363d] rounded-full overflow-hidden">
+      <div class="w-full h-3 bg-border rounded-full overflow-hidden">
         <div
           class="h-full transition-all duration-300"
           :style="{
@@ -112,7 +112,7 @@ const handleSave = (
         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       >
         <ConfettiCanvas />
-        <div class="card p-8 flex flex-col items-center gap-4 z-[52]">
+        <div class="card p-8 flex flex-col items-center gap-4 z-52">
           <p class="text-2xl font-bold">All done!!!</p>
           <button class="button" @click="showSuccess = false">Ok</button>
         </div>

@@ -79,7 +79,7 @@ const handleSave = () => {
               :class="
                 shape === defaultShape.type
                   ? 'border-blue-500 bg-blue-500/20 text-white'
-                  : 'border-[#30363d] text-gray-400 hover:border-gray-500'
+                  : 'border-border text-gray-400 hover:border-gray-500'
               "
               @click="shape = defaultShape.type"
             >
@@ -114,7 +114,7 @@ const handleSave = () => {
 
           <button class="button w-full" @click="handleSave">Save</button>
           <button
-            class="button w-full bg-transparent border border-[#30363d] hover:bg-[#21262d]"
+            class="button w-full bg-transparent border border-border hover:bg-surface-hover"
             @click="emit('close')"
           >
             Cancel
