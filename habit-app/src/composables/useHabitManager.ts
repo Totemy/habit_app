@@ -34,6 +34,10 @@ export function useHabitManager() {
 
   const findHabit = (id: string) => habits.value.find((h) => h.id === id)
 
+  const setActiveToFirstHabit = () => {
+    activeHabitId.value = habits.value[0]?.id ?? null
+  }
+
   const updateItemsCount = (habit: Habit, newCount: number) => {
     const current = habit.items.length
 
@@ -52,7 +56,7 @@ export function useHabitManager() {
     const newHabit: Habit = {
       ...habit,
       id: crypto.randomUUID(),
-      title: habit.title + '(copy)',
+      title: `${habit.title} (copy)`,
       description: habit.description,
       items: habit.items.map((item) => ({ ...item })),
     }
@@ -73,17 +77,13 @@ export function useHabitManager() {
     const habit = createHabit(title, count, color, shape, description ?? '')
     habits.value.push(habit)
     activeHabitId.value = habit.id
-
-    if (!activeHabitId.value) {
-      activeHabitId.value = habit.id
-    }
   }
 
   const remove = (id: string) => {
     habits.value = habits.value.filter((h) => h.id !== id)
 
     if (activeHabitId.value === id) {
-      activeHabitId.value = habits.value[0]?.id ?? null
+      setActiveToFirstHabit()
     }
   }
 
@@ -95,7 +95,7 @@ export function useHabitManager() {
     shape: HabitShape,
     description: string,
   ) => {
-    const habit = habits.value.find((h) => h.id === id)
+    const habit = findHabit(id)
     if (!habit) return
 
     habit.title = title
@@ -103,10 +103,7 @@ export function useHabitManager() {
     habit.shape = shape
     habit.description = description
 
-    const current = habit.items.length
-    if (newCount > current)
-      habit.items.push(...createHabitItems(newCount - current))
-    if (newCount < current) habit.items.splice(newCount)
+    updateItemsCount(habit, newCount)
   }
 
   const rename = (id: string, title: string) => {
