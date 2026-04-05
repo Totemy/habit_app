@@ -106,12 +106,16 @@ const safeCount = computed({
             xmlns="http://www.w3.org/2000/svg"
             class="w-6 h-6 m-2 mx-auto cursor-pointer transition hover:scale-110"
             viewBox="0 0 24 24"
-            :style="{
-              fill: color,
-              filter: `drop-shadow(0 0 4px ${color})`,
-            }"
-            v-html="defaultShape.svgIcon"
-          />
+            style="overflow: visible"
+          >
+            <g
+              :style="{
+                fill: color,
+                filter: `drop-shadow(0 0 4px ${color})`,
+              }"
+              v-html="defaultShape.svgIcon"
+            />
+          </svg>
           <div class="min-w-14">
             {{ defaultShape.label }}
           </div>

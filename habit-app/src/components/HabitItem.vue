@@ -23,11 +23,15 @@ const emit = defineEmits<{
     xmlns="http://www.w3.org/2000/svg"
     class="w-6 h-6 m-2 cursor-pointer transition hover:scale-110"
     viewBox="0 0 24 24"
-    :style="{
-      fill: item.isChecked ? color : '#30363d',
-      filter: item.isChecked ? `drop-shadow(0 0 4px ${color})` : 'none',
-    }"
-    v-html="defaultShapes.find((i) => i.type === shape)?.svgIcon"
+    style="overflow: visible"
     @click="$emit('click')"
-  />
+  >
+    <g
+      :style="{
+        fill: item.isChecked ? color : '#30363d',
+        filter: item.isChecked ? `drop-shadow(0 0 4px ${color})` : 'none',
+      }"
+      v-html="defaultShapes.find((i) => i.type === shape)?.svgIcon"
+    />
+  </svg>
 </template>
