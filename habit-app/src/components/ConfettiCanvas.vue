@@ -115,5 +115,5 @@ onUnmounted(stop)
 </script>
 
 <template>
-  <canvas ref="canvasRef" class="fixed inset-0 pointer-events-none z-[51]" />
+  <canvas ref="canvasRef" class="fixed inset-0 pointer-events-none z-51" />
 </template>
