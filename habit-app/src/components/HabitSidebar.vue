@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed, inject, ref } from 'vue'
 import type { useHabitManager } from '../composables/useHabitManager'
 import HabitSidebarItem from './HabitSidebarItem.vue'
 import HabitForm from './HabitForm.vue'
@@ -15,31 +15,78 @@ if (!habitManager) throw new Error('habitManager not provided')
 const { state, open } = useContextMenu()
 
 const habits = computed(() => habitManager.habits.value)
+const draggedHabitId = ref<string | null>(null)
+const dropTargetHabitId = ref<string | null>(null)
 
 const selectHabit = (id: string) => {
   habitManager.setActive(id)
   emit('close')
 }
+
+const handleDragStart = (event: DragEvent, habitId: string) => {
+  draggedHabitId.value = habitId
+
+  if (!event.dataTransfer) return
+  event.dataTransfer.effectAllowed = 'move'
+  event.dataTransfer.setData('text/plain', habitId)
+}
+
+const handleDragOver = (event: DragEvent, targetId: string) => {
+  event.preventDefault()
+
+  if (draggedHabitId.value && draggedHabitId.value !== targetId) {
+    dropTargetHabitId.value = targetId
+  }
+}
+
+const handleDrop = (event: DragEvent, targetId: string) => {
+  event.preventDefault()
+
+  const draggedId = draggedHabitId.value
+  if (!draggedId) return
+
+  habitManager.reorder(draggedId, targetId)
+  dropTargetHabitId.value = null
+  draggedHabitId.value = null
+}
+
+const handleDragEnd = () => {
+  dropTargetHabitId.value = null
+  draggedHabitId.value = null
+}
 </script>
 <template>
   <div class="space-y-3">
-    <HabitSidebarItem
-      v-for="habit in habits"
-      :key="habit.id"
-      :habit="habit"
-      :is-active="habitManager.activeHabitId.value === habit.id"
-      :is-editing="habitManager.editingHabitId.value === habit.id"
-      :is-resizing="habitManager.resizingHabitId.value === habit.id"
-      @click="selectHabit(habit.id)"
-      @rename="(title: string) => habitManager.rename(habit.id, title)"
-      @resize="(count: number) => habitManager.resize(habit.id, count)"
-      @contextmenu.prevent="
-        (e: MouseEvent) => {
-          open(e, getMenu(habit, habitManager))
-        }
-      "
-      @open-menu="(e: MouseEvent) => open(e, getMenu(habit, habitManager))"
-    />
+    <template v-for="habit in habits" :key="habit.id">
+      <div
+        v-if="dropTargetHabitId === habit.id"
+        class="h-0.5 rounded-full bg-tahiti"
+      />
+      <div
+        class="rounded-lg transition cursor-grab active:cursor-grabbing"
+        draggable="true"
+        @dragstart="(event: DragEvent) => handleDragStart(event, habit.id)"
+        @dragover="(event: DragEvent) => handleDragOver(event, habit.id)"
+        @drop="(event: DragEvent) => handleDrop(event, habit.id)"
+        @dragend="handleDragEnd"
+      >
+        <HabitSidebarItem
+          :habit="habit"
+          :is-active="habitManager.activeHabitId.value === habit.id"
+          :is-editing="habitManager.editingHabitId.value === habit.id"
+          :is-resizing="habitManager.resizingHabitId.value === habit.id"
+          @click="selectHabit(habit.id)"
+          @rename="(title: string) => habitManager.rename(habit.id, title)"
+          @resize="(count: number) => habitManager.resize(habit.id, count)"
+          @contextmenu.prevent="
+            (e: MouseEvent) => {
+              open(e, getMenu(habit, habitManager))
+            }
+          "
+          @open-menu="(e: MouseEvent) => open(e, getMenu(habit, habitManager))"
+        />
+      </div>
+    </template>
 
     <button class="button w-full mt-4" @click="habitManager.openCreate()">
       Create new habit

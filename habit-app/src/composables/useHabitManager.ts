@@ -63,6 +63,20 @@ export function useHabitManager() {
     habits.value.push(newHabit)
   }
 
+  const reorder = (draggedId: string, targetId: string) => {
+    if (draggedId === targetId) return
+
+    const fromIndex = habits.value.findIndex((habit) => habit.id === draggedId)
+    const toIndex = habits.value.findIndex((habit) => habit.id === targetId)
+
+    if (fromIndex === -1 || toIndex === -1) return
+
+    const [movedHabit] = habits.value.splice(fromIndex, 1)
+    if (!movedHabit) return
+
+    habits.value.splice(toIndex, 0, movedHabit)
+  }
+
   // auto-save
   watch(habits, () => saveHabits(), { deep: true })
 
@@ -157,6 +171,7 @@ export function useHabitManager() {
     rename,
     resize,
     duplicate,
+    reorder,
 
     // UI state
     setActive,

@@ -93,4 +93,23 @@ describe('useHabitManager', () => {
     expect(manager.habits.value).toHaveLength(1)
     expect(manager.activeHabitId.value).toBe('habit-1')
   })
+
+  it('reorders habits by ids', () => {
+    const manager = useHabitManager()
+    manager.add('A', 1, '#59c217', 'circle', '')
+    manager.add('B', 1, '#59c217', 'circle', '')
+    manager.add('C', 1, '#59c217', 'circle', '')
+
+    const firstId = manager.habits.value[0]!.id
+    const secondId = manager.habits.value[1]!.id
+    const thirdId = manager.habits.value[2]!.id
+
+    manager.reorder(firstId, thirdId)
+
+    expect(manager.habits.value.map((habit) => habit.id)).toEqual([
+      secondId,
+      thirdId,
+      firstId,
+    ])
+  })
 })
