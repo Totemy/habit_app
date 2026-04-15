@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+import { computed, inject } from 'vue'
 import type { useHabitManager } from '../composables/useHabitManager'
+import { useSidebarDragAndDrop } from '../composables/useSidebarDragAndDrop'
 import HabitSidebarItem from './HabitSidebarItem.vue'
 import HabitForm from './HabitForm.vue'
 import { useContextMenu } from '../composables/useContextMenu'
@@ -15,60 +16,38 @@ if (!habitManager) throw new Error('habitManager not provided')
 const { state, open } = useContextMenu()
 
 const habits = computed(() => habitManager.habits.value)
-const draggedHabitId = ref<string | null>(null)
-const dropTargetHabitId = ref<string | null>(null)
+const dragAndDrop = useSidebarDragAndDrop(habits, habitManager.reorder)
+const dropTargetIndex = computed(() => dragAndDrop.dropTargetIndex.value)
 
 const selectHabit = (id: string) => {
   habitManager.setActive(id)
   emit('close')
 }
-
-const handleDragStart = (event: DragEvent, habitId: string) => {
-  draggedHabitId.value = habitId
-
-  if (!event.dataTransfer) return
-  event.dataTransfer.effectAllowed = 'move'
-  event.dataTransfer.setData('text/plain', habitId)
-}
-
-const handleDragOver = (event: DragEvent, targetId: string) => {
-  event.preventDefault()
-
-  if (draggedHabitId.value && draggedHabitId.value !== targetId) {
-    dropTargetHabitId.value = targetId
-  }
-}
-
-const handleDrop = (event: DragEvent, targetId: string) => {
-  event.preventDefault()
-
-  const draggedId = draggedHabitId.value
-  if (!draggedId) return
-
-  habitManager.reorder(draggedId, targetId)
-  dropTargetHabitId.value = null
-  draggedHabitId.value = null
-}
-
-const handleDragEnd = () => {
-  dropTargetHabitId.value = null
-  draggedHabitId.value = null
-}
 </script>
 <template>
-  <div class="space-y-3">
-    <template v-for="habit in habits" :key="habit.id">
+  <div
+    :ref="dragAndDrop.listRef"
+    class="space-y-3"
+    @dragover="dragAndDrop.handleDragOver"
+    @drop="dragAndDrop.handleDrop"
+  >
+    <template v-for="(habit, index) in habits" :key="habit.id">
       <div
-        v-if="dropTargetHabitId === habit.id"
+        v-if="dropTargetIndex === index"
         class="h-0.5 rounded-full bg-tahiti"
       />
       <div
+        data-habit-item="true"
         class="rounded-lg transition cursor-grab active:cursor-grabbing"
         draggable="true"
-        @dragstart="(event: DragEvent) => handleDragStart(event, habit.id)"
-        @dragover="(event: DragEvent) => handleDragOver(event, habit.id)"
-        @drop="(event: DragEvent) => handleDrop(event, habit.id)"
-        @dragend="handleDragEnd"
+        @dragstart="
+          (event: DragEvent) => dragAndDrop.handleDragStart(event, habit.id)
+        "
+        @dragend="dragAndDrop.handleDragEnd"
+        @touchstart="dragAndDrop.handleTouchStart(habit.id)"
+        @touchmove="dragAndDrop.handleTouchMove"
+        @touchend="dragAndDrop.handleTouchEnd"
+        @touchcancel="dragAndDrop.handleTouchEnd"
       >
         <HabitSidebarItem
           :habit="habit"
@@ -87,6 +66,11 @@ const handleDragEnd = () => {
         />
       </div>
     </template>
+
+    <div
+      v-if="dropTargetIndex === habits.length"
+      class="h-0.5 rounded-full bg-tahiti"
+    />
 
     <button class="button w-full mt-4" @click="habitManager.openCreate()">
       Create new habit
